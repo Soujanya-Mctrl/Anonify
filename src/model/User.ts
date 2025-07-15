@@ -24,7 +24,13 @@ export interface User extends Document {
 const UserSchema: Schema<User> = new Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true, match: [/.+\@.+\..+/, 'Please use a valid email address.'] },
-    password: { type: String, required: true },
+    password: {
+        type: String,
+        required: true,
+        match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/, "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"],
+        minlength: [8, "Password must be at least 8 characters long"],
+        maxlength: [100, "Password must be at most 100 characters long"]
+    },
     verifyCode: { type: String, required: true },
     verifyCodeExpry: { type: Date, required: true },
     isVerified: { type: Boolean, default: false },
